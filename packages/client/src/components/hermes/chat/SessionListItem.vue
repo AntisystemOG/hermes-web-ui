@@ -4,7 +4,6 @@ import { NPopconfirm, NCheckbox, NTooltip } from 'naive-ui'
 import { useI18n } from 'vue-i18n'
 import type { Session } from '@/stores/hermes/chat'
 import { useAppStore } from '@/stores/hermes/app'
-import { useProfilesStore } from '@/stores/hermes/profiles'
 import ProfileAvatar from '@/components/hermes/profiles/ProfileAvatar.vue'
 import { formatTimestampMs } from '@/shared/session-display'
 
@@ -30,14 +29,13 @@ const emit = defineEmits<{
 
 const { t } = useI18n()
 const appStore = useAppStore()
-const profilesStore = useProfilesStore()
 const sessionModelName = computed(() =>
   props.session.model
     ? appStore.displayModelName(props.session.model, props.session.provider)
     : '',
 )
 const profileName = computed(() => props.session.profile || 'default')
-const profileAvatar = computed(() => '/spock-avatar.png')
+const profileAvatar = computed(() => ({ type: 'image' as const, dataUrl: '/spock-avatar.png' }))
 const profileHasModels = computed(() => {
   const profileModels = appStore.profileModelGroups.find(profile => profile.profile === profileName.value)
   return !!profileModels?.groups?.some(group => group.models.length > 0)
