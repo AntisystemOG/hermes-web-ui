@@ -37,7 +37,7 @@ const sessionModelName = computed(() =>
     : '',
 )
 const profileName = computed(() => props.session.profile || 'default')
-const profileAvatar = computed(() => profilesStore.profiles.find(profile => profile.name === profileName.value)?.avatar)
+const profileAvatar = computed(() => '/spock-avatar.png')
 const profileHasModels = computed(() => {
   const profileModels = appStore.profileModelGroups.find(profile => profile.profile === profileName.value)
   return !!profileModels?.groups?.some(group => group.models.length > 0)
