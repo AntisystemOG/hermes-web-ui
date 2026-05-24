@@ -23,12 +23,30 @@ export function clearApiKey() {
 }
 
 export function hasApiKey(): boolean {
-  return !!getApiKey()
+  const token = getApiKey()
+  if (!token) return false
+  // Validate JWT expiry on client side (server also checks it, but this prevents stale redirects)
+  try {
+    const payload = token.split('.')[1]
+    if (!payload) return false
+    const normalized = payload.replace(/-/g, '+').replace(/_/g, '/')
+    const padded = normalized.padEnd(Math.ceil(normalized.length / 4) * 4, '=')
+    const data = JSON.parse(atob(padded)) as { exp?: number }
+    if (typeof data.exp !== 'number') return false
+    if (Math.floor(Date.now() / 1000) >= data.exp) {
+      clearApiKey()
+      return false
+    }
+  } catch {
+    return false
+  }
+  return true
 }
 
 export type StoredUserRole = 'super_admin' | 'admin'
 
 export function getStoredUserRole(): StoredUserRole | null {
+  if (!hasApiKey()) return null
   const token = getApiKey()
   const payload = token.split('.')[1]
   if (!payload) return null

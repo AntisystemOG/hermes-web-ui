@@ -25,13 +25,9 @@ if (isComic) {
   document.documentElement.classList.add('comic')
 }
 
-// Read token from URL BEFORE router initializes (hash router strips params)
-const urlParams = new URLSearchParams(window.location.search)
-const hashQuery = window.location.hash.split('?')[1]
-const urlToken = urlParams.get('token') || (hashQuery ? new URLSearchParams(hashQuery).get('token') : null)
-if (urlToken) {
-  ;(window as any).__LOGIN_TOKEN__ = urlToken
-}
+// Removed URL token auto-login: every access must prompt for username/password.
+// The server-side bearer token remains required for API calls, but the SPA
+// no longer accepts URL-injected tokens that bypass the login form.
 
 const app = createApp(App)
 app.use(createPinia())

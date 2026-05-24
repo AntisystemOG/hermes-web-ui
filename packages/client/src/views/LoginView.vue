@@ -2,7 +2,7 @@
 import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { useI18n } from "vue-i18n";
-import { setApiKey, hasApiKey } from "@/api/client";
+import { setApiKey } from "@/api/client";
 import { fetchAuthStatus, loginWithPassword } from "@/api/auth";
 
 const { t } = useI18n();
@@ -13,10 +13,8 @@ const password = ref("");
 const loading = ref(false);
 const errorMsg = ref("");
 
-// If already has a key, try to go to main page
-if (hasApiKey()) {
-  router.replace("/hermes/chat");
-}
+// Removed: auto-redirect away from login. Every visit to login must show the form.
+// Users with valid tokens stay on the login page; submitting credentials refreshes the token.
 
 onMounted(async () => {
   try {
