@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import multiavatar from '@multiavatar/multiavatar'
 import type { ProfileAvatar } from '@/api/hermes/profiles'
 
 const props = withDefaults(defineProps<{
@@ -11,8 +10,6 @@ const props = withDefaults(defineProps<{
   size: 24,
 })
 
-const fallbackSeed = computed(() => props.name || 'default')
-const generatedSvg = computed(() => multiavatar(props.avatar?.seed || fallbackSeed.value))
 const style = computed(() => ({
   width: `${props.size}px`,
   height: `${props.size}px`,
@@ -29,7 +26,13 @@ const style = computed(() => ({
       alt=""
       draggable="false"
     >
-    <span v-else class="profile-avatar-svg" v-html="generatedSvg" />
+    <img
+      v-else
+      class="profile-avatar-image"
+      src="/spock-avatar.png"
+      alt=""
+      draggable="false"
+    >
   </span>
 </template>
 
